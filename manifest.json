@@ -1,1 +1,16 @@
-{"name":"Unpainted Souls","short_name":"Unpainted Souls","start_url":"./index.html","display":"standalone","background_color":"#050814","theme_color":"#050814","description":"Multi-frequency soundscape app by Unpainted Souls.","icons":[{"src":"logo.jpeg","sizes":"512x512","type":"image/jpeg"}]}
+{
+  "name": "Unpainted Souls V3",
+  "short_name": "Unpainted Souls",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#050814",
+  "theme_color": "#050814",
+  "description": "Professional frequency, binaural, and isochronic sound app by Unpainted Souls.",
+  "icons": [
+    {
+      "src": "assets/logo.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

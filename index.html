@@ -1,92 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unpainted Souls V2</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#050814">
-<style>
-:root{--gold:#d7a84f;--gold2:#ffe08a;--text:#fff8e8;--muted:#aeb7ca;--blue:#83d9ff}
-*{box-sizing:border-box}
-body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 20% 0%,rgba(131,217,255,.22),transparent 34%),radial-gradient(circle at 85% 10%,rgba(255,224,138,.18),transparent 26%),linear-gradient(180deg,#030611,#070b17 70%,#02030a);min-height:100vh}
-canvas#stars{position:fixed;inset:0;z-index:-1}
-.app{max-width:680px;margin:auto;padding:22px 16px 96px}
-.hero{text-align:center}.logo{width:108px;height:108px;border-radius:50%;object-fit:cover;border:2px solid var(--gold2);box-shadow:0 0 44px rgba(215,168,79,.4)}
-h1{font-size:31px;letter-spacing:4px;color:var(--gold2);margin:14px 0 4px}h2{margin:0 0 12px}p{color:var(--muted);line-height:1.4}
-.badge{display:inline-block;margin:4px;padding:7px 10px;border-radius:99px;border:1px solid rgba(131,217,255,.22);background:rgba(131,217,255,.09);color:#d7f5ff;font-size:12px}
-.screen{display:none}.screen.active{display:block}
-.card{background:linear-gradient(180deg,rgba(23,33,60,.95),rgba(8,13,28,.97));border:1px solid rgba(255,224,138,.2);border-radius:25px;padding:18px;margin:16px 0;box-shadow:0 18px 60px rgba(0,0,0,.36)}
-.row{display:flex;gap:10px}.row>*{flex:1}
-label{display:block;color:var(--muted);font-size:13px;margin:10px 0 5px}
-input,select,textarea{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:#060a16;color:var(--text);font-size:16px;outline:none}
-textarea{min-height:96px;resize:vertical}input[type=range]{padding:0;accent-color:var(--gold)}
-button{width:100%;border:0;border-radius:16px;padding:14px;margin:7px 0;font-size:16px;font-weight:800;color:#06101c;background:linear-gradient(90deg,var(--gold),var(--gold2))}
-button.secondary{background:#111a31;color:var(--text);border:1px solid rgba(255,224,138,.24)}button.danger{background:#2a1220;color:#ffdce8;border:1px solid rgba(255,138,174,.24)}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.grid button{font-size:13px;padding:12px 6px}
-.status{text-align:center;color:var(--blue);font-size:18px;margin:10px}
-.visual{height:150px;border-radius:24px;position:relative;overflow:hidden;margin:12px 0;background:radial-gradient(circle at 50% 50%,rgba(131,217,255,.25),transparent 38%),linear-gradient(90deg,rgba(255,224,138,.08),rgba(198,156,255,.12))}
-.orb{position:absolute;width:92px;height:92px;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,var(--gold2),rgba(131,217,255,.25),transparent 70%);animation:pulse 4.5s infinite}
-.ring{position:absolute;border:1px solid rgba(255,224,138,.45);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);animation:ripple 4s infinite}.r2{animation-delay:1s}.r3{animation-delay:2s}
-@keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.25);opacity:.6}}@keyframes ripple{from{width:40px;height:40px;opacity:.85}to{width:340px;height:340px;opacity:0}}
-.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(5,8,20,.94);backdrop-filter:blur(14px);display:flex;justify-content:center;border-top:1px solid rgba(255,224,138,.16);z-index:5}
-.nav button{max-width:130px;background:transparent;color:var(--muted);border:0;border-radius:0;padding:12px 4px;font-size:12px;margin:0}.nav button.active{color:var(--gold2)}
-.listItem{background:#070c18;border:1px solid rgba(255,255,255,.08);padding:12px;border-radius:16px;margin:8px 0}
-.listTop{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.small{font-size:12px;color:var(--muted);line-height:1.4}.meter{height:8px;background:#0a1020;border-radius:99px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}.meter div{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--gold2))}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unpainted Souls V3</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/style.css" />
+  <meta name="theme-color" content="#050814" />
 </head>
 <body>
-<canvas id="stars"></canvas>
-<div class="app">
-<div class="hero"><img src="logo.jpeg" class="logo" onerror="this.style.display='none'"><h1>UNPAINTED SOULS</h1><p>V2 Multi-Frequency Mixer</p><span class="badge">Multi Mixer</span><span class="badge">Binaural Beats</span><span class="badge">Soundscapes</span></div>
+  <canvas id="visualizer"></canvas>
 
-<section id="home" class="screen active"><div class="card"><h2>Choose Your Experience</h2><div class="grid"><button onclick="quickStack([528,432],'ocean')">Relax</button><button onclick="quickStack([432,639],'wind')">Meditate</button><button onclick="quickBinaural(6)">Theta</button><button class="secondary" onclick="quickStack([639,528],'rain')">Heart</button><button class="secondary" onclick="quickStack([174,285],'ocean')">Sleep</button><button class="secondary" onclick="showScreen('mixer')">Create</button></div><div class="visual"><div class="orb"></div><div class="ring"></div><div class="ring r2"></div><div class="ring r3"></div></div><div class="meter"><div id="level"></div></div><div id="status" class="status">Ready</div><button class="danger" onclick="stopEverything()">Stop All Sound</button></div></section>
+  <main class="app">
+    <header class="hero">
+      <img src="assets/logo.jpeg" class="logo" alt="Unpainted Souls logo" onerror="this.style.display='none'" />
+      <h1>UNPAINTED SOULS</h1>
+      <p>V3 Professional Audio Engine</p>
+      <div class="badges">
+        <span>Multi-Layer Audio</span>
+        <span>Frequency Sweeps</span>
+        <span>Isochronic Tones</span>
+      </div>
+    </header>
 
-<section id="mixer" class="screen">
-<div class="card"><h2>Multi-Frequency Mixer</h2><div class="row"><div><label>Frequency Hz</label><input id="newFreq" type="number" value="528"></div><div><label>Wave</label><select id="newWave"><option>sine</option><option>triangle</option><option>sawtooth</option><option>square</option></select></div></div><button onclick="addFrequency()">Add Frequency Layer</button><div class="grid"><button class="secondary" onclick="addPreset(174)">174</button><button class="secondary" onclick="addPreset(285)">285</button><button class="secondary" onclick="addPreset(396)">396</button><button class="secondary" onclick="addPreset(417)">417</button><button class="secondary" onclick="addPreset(432)">432</button><button class="secondary" onclick="addPreset(528)">528</button><button class="secondary" onclick="addPreset(639)">639</button><button class="secondary" onclick="addPreset(741)">741</button><button class="secondary" onclick="addPreset(963)">963</button></div><div id="layers"></div><button class="secondary" onclick="saveSession()">Save Session</button><button class="danger" onclick="clearLayers()">Clear Mixer</button></div>
-</section>
+    <section class="card">
+      <h2>Master Controls</h2>
+      <label>Master Volume</label>
+      <input id="masterVolume" type="range" min="0" max="1" value="0.8" step="0.01" />
+      <div class="row">
+        <button id="fadeInBtn">Fade In</button>
+        <button id="fadeOutBtn" class="secondary">Fade Out</button>
+        <button id="stopAllBtn" class="danger">Stop All</button>
+      </div>
+      <div id="status" class="status">Ready</div>
+    </section>
 
-<section id="beats" class="screen"><div class="card"><h2>Binaural Beats</h2><div class="row"><div><label>Carrier Hz</label><input id="carrier" type="number" value="220"></div><div><label>Beat</label><select id="beat"><option value="2">Delta 2</option><option value="6" selected>Theta 6</option><option value="10">Alpha 10</option><option value="18">Beta 18</option><option value="40">Gamma 40</option></select></div></div><label>Volume</label><input id="beatVol" type="range" min="0" max=".6" step=".01" value=".12" oninput="updateVolumes()"><button onclick="startBinaural()">Start Binaural</button><button class="danger" onclick="stopBinaural()">Stop Binaural</button><p class="small">Use headphones. For creative relaxation, not medical treatment.</p></div></section>
+    <section class="card">
+      <h2>Frequency Layer</h2>
+      <div class="row">
+        <div>
+          <label>Frequency Hz</label>
+          <input id="freqInput" type="number" value="528" min="20" max="20000" />
+        </div>
+        <div>
+          <label>Waveform</label>
+          <select id="waveInput">
+            <option>sine</option>
+            <option>triangle</option>
+            <option>sawtooth</option>
+            <option>square</option>
+          </select>
+        </div>
+      </div>
+      <button id="addLayerBtn">Add Frequency Layer</button>
+      <div class="preset-grid">
+        <button data-preset="174">174</button>
+        <button data-preset="285">285</button>
+        <button data-preset="396">396</button>
+        <button data-preset="417">417</button>
+        <button data-preset="432">432</button>
+        <button data-preset="528">528</button>
+        <button data-preset="639">639</button>
+        <button data-preset="741">741</button>
+        <button data-preset="963">963</button>
+      </div>
+      <div id="layers"></div>
+    </section>
 
-<section id="sounds" class="screen"><div class="card"><h2>Soundscape Mixer</h2><div class="grid"><button class="secondary" onclick="startNoise('ocean')">Ocean</button><button class="secondary" onclick="startNoise('rain')">Rain</button><button class="secondary" onclick="startNoise('wind')">Wind</button></div><label>Soundscape Volume</label><input id="noiseVol" type="range" min="0" max="0.4" value="0.08" step="0.01" oninput="updateVolumes()"><button class="danger" onclick="stopNoise()">Stop Soundscape</button></div><div class="card"><h2>Prompt Builder</h2><textarea id="prompt" placeholder="Ocean at sunset with 432, 528 and theta beat"></textarea><button onclick="buildFromPrompt()">Build Session</button></div></section>
+    <section class="card">
+      <h2>Frequency Sweep</h2>
+      <div class="row">
+        <div>
+          <label>Start Hz</label>
+          <input id="sweepStart" type="number" value="174" />
+        </div>
+        <div>
+          <label>End Hz</label>
+          <input id="sweepEnd" type="number" value="528" />
+        </div>
+      </div>
+      <label>Duration Seconds</label>
+      <input id="sweepDuration" type="range" min="5" max="120" value="30" />
+      <button id="sweepBtn">Start Sweep</button>
+    </section>
 
-<section id="timer" class="screen"><div class="card"><h2>Session Timer</h2><div class="grid"><button class="secondary" onclick="setTimer(300)">5 min</button><button class="secondary" onclick="setTimer(600)">10 min</button><button class="secondary" onclick="setTimer(1200)">20 min</button><button class="secondary" onclick="setTimer(1800)">30 min</button><button class="secondary" onclick="setTimer(3600)">60 min</button><button class="secondary" onclick="clearTimer()">Clear</button></div><div id="timerDisplay" class="status">No timer</div></div></section>
-<section id="favorites" class="screen"><div class="card"><h2>Saved Sessions</h2><div id="favList"></div><button class="danger" onclick="clearFavorites()">Clear Sessions</button></div></section>
-</div>
+    <section class="card">
+      <h2>Isochronic Tone</h2>
+      <div class="row">
+        <div>
+          <label>Carrier Hz</label>
+          <input id="isoCarrier" type="number" value="220" />
+        </div>
+        <div>
+          <label>Pulse Hz</label>
+          <input id="isoPulse" type="number" value="6" />
+        </div>
+      </div>
+      <button id="isoBtn">Start Isochronic</button>
+    </section>
 
-<nav class="nav"><button class="active" onclick="showScreen('home',this)">Home</button><button onclick="showScreen('mixer',this)">Mixer</button><button onclick="showScreen('beats',this)">Beats</button><button onclick="showScreen('sounds',this)">Sounds</button><button onclick="showScreen('timer',this)">Timer</button><button onclick="showScreen('favorites',this)">Saved</button></nav>
+    <section class="card">
+      <h2>Binaural Beat</h2>
+      <div class="row">
+        <div>
+          <label>Carrier Hz</label>
+          <input id="binauralCarrier" type="number" value="220" />
+        </div>
+        <div>
+          <label>Beat Hz</label>
+          <select id="binauralBeat">
+            <option value="2">Delta 2</option>
+            <option value="6" selected>Theta 6</option>
+            <option value="10">Alpha 10</option>
+            <option value="18">Beta 18</option>
+            <option value="40">Gamma 40</option>
+          </select>
+        </div>
+      </div>
+      <button id="binauralBtn">Start Binaural</button>
+      <p class="note">Use headphones for binaural beats. This app is for creative relaxation only.</p>
+    </section>
 
-<script>
-let ctx,master,analyser,frequencyLayers=[],leftOsc,rightOsc,beatGainL,beatGainR,noiseNode,noiseGain,timerId,remaining=0;
-function getCtx(){if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();analyser=ctx.createAnalyser();analyser.fftSize=64;master.gain.value=.9;master.connect(analyser);analyser.connect(ctx.destination);animateMeter()}if(ctx.state==="suspended")ctx.resume();return ctx}
-function showScreen(id,btn){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderLayers();renderFavorites()}
-function setStatus(t){document.getElementById("status").innerText=t}function stopNode(n){try{if(n){n.stop();n.disconnect()}}catch(e){}}
-function addFrequency(){addLayer(Number(document.getElementById("newFreq").value||528),document.getElementById("newWave").value,.12)}
-function addPreset(f){document.getElementById("newFreq").value=f;addLayer(f,document.getElementById("newWave").value,.12)}
-function addLayer(freq,wave,vol){getCtx();let osc=ctx.createOscillator(),gain=ctx.createGain(),pan=ctx.createStereoPanner();osc.type=wave;osc.frequency.value=freq;gain.gain.value=vol;pan.pan.value=0;osc.connect(gain).connect(pan).connect(master);osc.start();frequencyLayers.push({freq,wave,vol,pan:0,osc,gain,panNode:pan});renderLayers();setStatus(freq+" Hz added")}
-function renderLayers(){let box=document.getElementById("layers");if(!box)return;box.innerHTML=frequencyLayers.length?"":"<p class='small'>No frequency layers yet.</p>";frequencyLayers.forEach((l,i)=>{box.innerHTML+=`<div class="listItem"><div class="listTop"><div><b>${l.freq} Hz</b><br><span class="small">${l.wave}</span></div><button class="danger" style="width:90px" onclick="removeLayer(${i})">Remove</button></div><label>Volume</label><input type="range" min="0" max=".6" step=".01" value="${l.vol}" oninput="setLayerVol(${i},this.value)"><label>Pan Left / Right</label><input type="range" min="-1" max="1" step=".01" value="${l.pan}" oninput="setLayerPan(${i},this.value)"></div>`})}
-function setLayerVol(i,v){if(frequencyLayers[i]){frequencyLayers[i].vol=Number(v);frequencyLayers[i].gain.gain.value=Number(v)}}
-function setLayerPan(i,v){if(frequencyLayers[i]){frequencyLayers[i].pan=Number(v);frequencyLayers[i].panNode.pan.value=Number(v)}}
-function removeLayer(i){let l=frequencyLayers[i];if(l)stopNode(l.osc);frequencyLayers.splice(i,1);renderLayers()}
-function clearLayers(){frequencyLayers.forEach(l=>stopNode(l.osc));frequencyLayers=[];renderLayers();setStatus("Mixer cleared")}
-function quickStack(freqs,sound){showScreen("home");clearLayers();freqs.forEach(f=>addLayer(f,"sine",.1));startNoise(sound);setStatus("Session started")}
-function startBinaural(){getCtx();stopBinaural();let carrier=Number(document.getElementById("carrier").value||220),beat=Number(document.getElementById("beat").value||6),merger=ctx.createChannelMerger(2);beatGainL=ctx.createGain();beatGainR=ctx.createGain();leftOsc=ctx.createOscillator();rightOsc=ctx.createOscillator();beatGainL.gain.value=beatGainR.gain.value=Number(document.getElementById("beatVol").value);leftOsc.frequency.value=carrier;rightOsc.frequency.value=carrier+beat;leftOsc.connect(beatGainL).connect(merger,0,0);rightOsc.connect(beatGainR).connect(merger,0,1);merger.connect(master);leftOsc.start();rightOsc.start();setStatus("Binaural "+beat+" Hz")}
-function quickBinaural(beat){document.getElementById("beat").value=beat;startBinaural()}
-function stopBinaural(){stopNode(leftOsc);stopNode(rightOsc);leftOsc=rightOsc=null;setStatus("Binaural stopped")}
-function updateVolumes(){if(noiseGain)noiseGain.gain.value=Number(document.getElementById("noiseVol").value);if(beatGainL&&beatGainR){let v=Number(document.getElementById("beatVol").value);beatGainL.gain.value=v;beatGainR.gain.value=v}}
-function startNoise(type){getCtx();stopNoise();let buffer=ctx.createBuffer(1,ctx.sampleRate*4,ctx.sampleRate),data=buffer.getChannelData(0);for(let i=0;i<data.length;i++){let n=Math.random()*2-1;if(type==="ocean")n*=Math.sin(i/4500)*.55+.45;if(type==="wind")n*=Math.sin(i/9000)*.45+.25;data[i]=n}noiseNode=ctx.createBufferSource();noiseNode.buffer=buffer;noiseNode.loop=true;let filter=ctx.createBiquadFilter();filter.type=type==="rain"?"highpass":"lowpass";filter.frequency.value=type==="rain"?1500:650;noiseGain=ctx.createGain();noiseGain.gain.value=Number(document.getElementById("noiseVol").value);noiseNode.connect(filter).connect(noiseGain).connect(master);noiseNode.start();setStatus(type+" soundscape")}
-function stopNoise(){stopNode(noiseNode);noiseNode=null;setStatus("Soundscape stopped")}
-function stopEverything(){clearLayers();stopBinaural();stopNoise();clearTimer();setStatus("All sound stopped")}
-function buildFromPrompt(){let p=document.getElementById("prompt").value.toLowerCase();clearLayers();let found=false;[174,285,396,417,432,528,639,741,963].forEach(f=>{if(p.includes(String(f))){addLayer(f,"sine",.1);found=true}});if(!found)addLayer(528,"sine",.12);startNoise(p.includes("rain")?"rain":p.includes("wind")?"wind":"ocean");if(p.includes("theta")){document.getElementById("beat").value=6;startBinaural()}if(p.includes("alpha")){document.getElementById("beat").value=10;startBinaural()}setStatus("Prompt session created")}
-function setTimer(sec){remaining=sec;clearInterval(timerId);tick();timerId=setInterval(()=>{remaining--;tick();if(remaining<=0)stopEverything()},1000)}function tick(){let m=Math.floor(remaining/60),s=remaining%60;document.getElementById("timerDisplay").innerText=m+":"+String(s).padStart(2,"0")}function clearTimer(){clearInterval(timerId);remaining=0;document.getElementById("timerDisplay").innerText="No timer"}
-function saveSession(){let favs=JSON.parse(localStorage.getItem("usSessions")||"[]");favs.push({date:new Date().toLocaleDateString(),layers:frequencyLayers.map(l=>({freq:l.freq,wave:l.wave,vol:l.vol,pan:l.pan}))});localStorage.setItem("usSessions",JSON.stringify(favs));setStatus("Session saved")}
-function renderFavorites(){let box=document.getElementById("favList");if(!box)return;let favs=JSON.parse(localStorage.getItem("usSessions")||"[]");box.innerHTML=favs.length?"":"<p class='small'>No sessions saved yet.</p>";favs.forEach((s,i)=>{box.innerHTML+=`<div class="listItem"><div class="listTop"><div><b>${s.layers.length} layers</b><br><span class="small">${s.layers.map(l=>l.freq+'Hz').join(', ')} • ${s.date}</span></div><button style="width:90px" onclick="loadSession(${i})">Play</button></div></div>`})}
-function loadSession(i){let s=JSON.parse(localStorage.getItem("usSessions")||"[]")[i];if(!s)return;clearLayers();s.layers.forEach(l=>addLayer(l.freq,l.wave,l.vol));showScreen("mixer");setStatus("Saved session loaded")}
-function clearFavorites(){localStorage.removeItem("usSessions");renderFavorites()}
-let canvas=document.getElementById("stars"),c=canvas.getContext("2d"),stars=[];function resize(){canvas.width=innerWidth;canvas.height=innerHeight;stars=Array.from({length:70},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.8+.3,v:Math.random()*.35+.05}))}addEventListener("resize",resize);resize();function drawStars(){c.clearRect(0,0,canvas.width,canvas.height);c.fillStyle="rgba(255,224,138,.65)";stars.forEach(s=>{s.y+=s.v;if(s.y>canvas.height)s.y=0;c.beginPath();c.arc(s.x,s.y,s.r,0,Math.PI*2);c.fill()});requestAnimationFrame(drawStars)}drawStars()
-function animateMeter(){if(!analyser)return;let data=new Uint8Array(analyser.frequencyBinCount);function loop(){analyser.getByteFrequencyData(data);let avg=data.reduce((a,b)=>a+b,0)/data.length;document.getElementById("level").style.width=Math.min(100,avg*1.4)+"%";requestAnimationFrame(loop)}loop()}
-if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js").catch(()=>{})}
-</script>
+    <section class="card">
+      <h2>Save Session</h2>
+      <button id="saveSessionBtn">Save Current Session</button>
+      <div id="sessions"></div>
+    </section>
+  </main>
+
+  <script src="js/audioEngine.js"></script>
+  <script src="js/visualizer.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
