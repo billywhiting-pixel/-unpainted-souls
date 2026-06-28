@@ -1,135 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Unpainted Souls V3</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="css/style.css" />
-  <meta name="theme-color" content="#050814" />
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Unpainted Souls V5</title>
+<link rel="manifest" href="manifest.json"><link rel="stylesheet" href="css/style.css">
+<meta name="theme-color" content="#050814">
 </head>
 <body>
-  <canvas id="visualizer"></canvas>
+<canvas id="visualizer"></canvas>
+<main class="app">
+<header class="hero">
+<img src="assets/logo.jpeg" class="logo" onerror="this.style.display='none'">
+<h1>UNPAINTED SOULS</h1><p>V5 Guided Sessions + Sleep Mode</p>
+<div class="badges"><span>Guided Voice</span><span>Breath Pacer</span><span>Sleep Fade</span><span>Sound Mixer</span></div>
+</header>
 
-  <main class="app">
-    <header class="hero">
-      <img src="assets/logo.jpeg" class="logo" alt="Unpainted Souls logo" onerror="this.style.display='none'" />
-      <h1>UNPAINTED SOULS</h1>
-      <p>V3 Professional Audio Engine</p>
-      <div class="badges">
-        <span>Multi-Layer Audio</span>
-        <span>Frequency Sweeps</span>
-        <span>Isochronic Tones</span>
-      </div>
-    </header>
+<section class="card"><h2>Quick Guided Sessions</h2>
+<div class="preset-grid">
+<button data-quick="sleep">Sleep</button><button data-quick="meditation">Meditation</button><button data-quick="focus">Focus</button>
+<button data-quick="relax">Relax</button><button data-quick="heart">Heart</button><button data-quick="deep">Deep Reset</button>
+</div><div id="status" class="status">Ready</div></section>
 
-    <section class="card">
-      <h2>Master Controls</h2>
-      <label>Master Volume</label>
-      <input id="masterVolume" type="range" min="0" max="1" value="0.8" step="0.01" />
-      <div class="row">
-        <button id="fadeInBtn">Fade In</button>
-        <button id="fadeOutBtn" class="secondary">Fade Out</button>
-        <button id="stopAllBtn" class="danger">Stop All</button>
-      </div>
-      <div id="status" class="status">Ready</div>
-    </section>
+<section class="card"><h2>Breath Pacer</h2>
+<div class="breathOrb" id="breathOrb">Breathe</div>
+<div class="row"><div><label>Inhale Seconds</label><input id="inhale" type="number" value="4"></div><div><label>Exhale Seconds</label><input id="exhale" type="number" value="6"></div></div>
+<div class="row"><button id="breathStart">Start Breath</button><button id="breathStop" class="secondary">Stop Breath</button></div>
+</section>
 
-    <section class="card">
-      <h2>Frequency Layer</h2>
-      <div class="row">
-        <div>
-          <label>Frequency Hz</label>
-          <input id="freqInput" type="number" value="528" min="20" max="20000" />
-        </div>
-        <div>
-          <label>Waveform</label>
-          <select id="waveInput">
-            <option>sine</option>
-            <option>triangle</option>
-            <option>sawtooth</option>
-            <option>square</option>
-          </select>
-        </div>
-      </div>
-      <button id="addLayerBtn">Add Frequency Layer</button>
-      <div class="preset-grid">
-        <button data-preset="174">174</button>
-        <button data-preset="285">285</button>
-        <button data-preset="396">396</button>
-        <button data-preset="417">417</button>
-        <button data-preset="432">432</button>
-        <button data-preset="528">528</button>
-        <button data-preset="639">639</button>
-        <button data-preset="741">741</button>
-        <button data-preset="963">963</button>
-      </div>
-      <div id="layers"></div>
-    </section>
+<section class="card"><h2>Guided Voice</h2>
+<select id="guideScript"><option value="relax">Relaxation</option><option value="sleep">Sleep</option><option value="body">Body Scan</option><option value="focus">Focus</option></select>
+<div class="row"><button id="speakGuide">Play Guide</button><button id="stopGuide" class="secondary">Stop Voice</button></div>
+<p class="note">Uses your device’s built-in speech voice.</p></section>
 
-    <section class="card">
-      <h2>Frequency Sweep</h2>
-      <div class="row">
-        <div>
-          <label>Start Hz</label>
-          <input id="sweepStart" type="number" value="174" />
-        </div>
-        <div>
-          <label>End Hz</label>
-          <input id="sweepEnd" type="number" value="528" />
-        </div>
-      </div>
-      <label>Duration Seconds</label>
-      <input id="sweepDuration" type="range" min="5" max="120" value="30" />
-      <button id="sweepBtn">Start Sweep</button>
-    </section>
+<section class="card"><h2>Sleep Timer + Fade</h2>
+<div class="preset-grid"><button data-timer="300">5 min</button><button data-timer="600">10 min</button><button data-timer="1200">20 min</button><button data-timer="1800">30 min</button><button data-timer="3600">60 min</button><button id="clearTimer" class="secondary">Clear</button></div>
+<label>Fade Out Last Seconds</label><input id="fadeSeconds" type="range" min="10" max="300" value="90">
+<div id="timerDisplay" class="status">No timer</div></section>
 
-    <section class="card">
-      <h2>Isochronic Tone</h2>
-      <div class="row">
-        <div>
-          <label>Carrier Hz</label>
-          <input id="isoCarrier" type="number" value="220" />
-        </div>
-        <div>
-          <label>Pulse Hz</label>
-          <input id="isoPulse" type="number" value="6" />
-        </div>
-      </div>
-      <button id="isoBtn">Start Isochronic</button>
-    </section>
+<section class="card"><h2>Master Controls</h2>
+<label>Master Volume</label><input id="masterVolume" type="range" min="0" max="1" value="0.8" step="0.01">
+<label>Reverb</label><input id="reverbMix" type="range" min="0" max="0.8" value="0.15" step="0.01">
+<label>Delay</label><input id="delayMix" type="range" min="0" max="0.7" value="0.08" step="0.01">
+<button id="stopAllBtn" class="danger">Stop All</button></section>
 
-    <section class="card">
-      <h2>Binaural Beat</h2>
-      <div class="row">
-        <div>
-          <label>Carrier Hz</label>
-          <input id="binauralCarrier" type="number" value="220" />
-        </div>
-        <div>
-          <label>Beat Hz</label>
-          <select id="binauralBeat">
-            <option value="2">Delta 2</option>
-            <option value="6" selected>Theta 6</option>
-            <option value="10">Alpha 10</option>
-            <option value="18">Beta 18</option>
-            <option value="40">Gamma 40</option>
-          </select>
-        </div>
-      </div>
-      <button id="binauralBtn">Start Binaural</button>
-      <p class="note">Use headphones for binaural beats. This app is for creative relaxation only.</p>
-    </section>
+<section class="card"><h2>Frequency Mixer</h2>
+<div class="row"><div><label>Frequency Hz</label><input id="freqInput" type="number" value="528"></div><div><label>Waveform</label><select id="waveInput"><option>sine</option><option>triangle</option><option>sawtooth</option><option>square</option></select></div></div>
+<button id="addLayerBtn">Add Frequency Layer</button>
+<div class="preset-grid"><button data-preset="174">174</button><button data-preset="285">285</button><button data-preset="396">396</button><button data-preset="417">417</button><button data-preset="432">432</button><button data-preset="528">528</button><button data-preset="639">639</button><button data-preset="741">741</button><button data-preset="963">963</button></div>
+<div id="layers"></div></section>
 
-    <section class="card">
-      <h2>Save Session</h2>
-      <button id="saveSessionBtn">Save Current Session</button>
-      <div id="sessions"></div>
-    </section>
-  </main>
+<section class="card"><h2>Sound Library</h2>
+<div class="preset-grid"><button data-sound="ocean">Ocean</button><button data-sound="rain">Rain</button><button data-sound="wind">Wind</button><button data-sound="forest">Forest</button><button data-sound="fireplace">Fireplace</button><button data-sound="crystal">Crystal Bowl</button><button data-sound="tibetan">Tibetan Bowl</button><button data-sound="chimes">Chimes</button><button data-sound="pad">Ambient Pad</button></div>
+<div id="soundLayers"></div></section>
 
-  <script src="js/audioEngine.js"></script>
-  <script src="js/visualizer.js"></script>
-  <script src="js/app.js"></script>
-</body>
-</html>
+<section class="card"><h2>Save Session</h2><textarea id="sessionName" placeholder="Session name"></textarea><button id="saveSessionBtn">Save Current Session</button><div id="sessions"></div></section>
+</main>
+<script src="js/audioEngine.js"></script><script src="js/soundLibrary.js"></script><script src="js/guided.js"></script><script src="js/visualizer.js"></script><script src="js/app.js"></script>
+</body></html>
